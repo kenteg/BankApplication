@@ -1,16 +1,18 @@
 package com.luxoft.bankapp.service;
 
-import com.luxoft.bankapp.domain.Bank;
-import com.luxoft.bankapp.domain.Client;
-import com.luxoft.bankapp.exceptions.*;
+import com.luxoft.bankapp.exceptions.ClientExistsException;
+import com.luxoft.bankapp.model.Account;
+import com.luxoft.bankapp.model.Bank;
+import com.luxoft.bankapp.model.Client;
 
+public interface BankService {
+	public void addClient(Bank bank, Client client)
+			throws ClientExistsException;
 
-/**
- * Created by omsk16 on 11/3/2016.
- */
-public class BankService {
+	public void removeClient(Bank bank, Client client);
 
-    public static void addClient(Bank bank, Client client) throws ClientExistException {
-        bank.addClient(client);
-    }
+	public void addAccount(Client client, Account account);
+
+	public void setActiveAccount(Client client, Account account);
+
 }

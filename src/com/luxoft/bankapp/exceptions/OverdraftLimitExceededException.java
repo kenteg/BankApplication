@@ -1,19 +1,19 @@
 package com.luxoft.bankapp.exceptions;
 
-import com.luxoft.bankapp.domain.Account;
+public class OverDraftLimitExceededException extends NotEnoughFundsException {
 
-/**
- * Created by omsk16 on 11/7/2016.
- */
-public class OverdraftLimitExceededException extends NotEnoughFundsException{
-    double overDraft;
-    public OverdraftLimitExceededException(Account account, double overdraft){
-        super(account);
-        overDraft = overdraft;
-    }
+	private static final long serialVersionUID = 1L;
+	private String account;
 
-    public double getOverDraft(){
-        return overDraft;
+	public OverDraftLimitExceededException(String account, float amount) {
+		super(amount);
+		this.account = account;
+	}
 
-    }
+	@Override
+	public String getMessage() {
+		return "Overdraft Limit exceeded on " + this.account + " amount: "
+				+ amount;
+
+	}
 }

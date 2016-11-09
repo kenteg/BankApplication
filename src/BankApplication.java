@@ -1,110 +1,119 @@
-import com.luxoft.bankapp.domain.*;
-import com.luxoft.bankapp.domain.listener.EmailNotificationListener;
-import com.luxoft.bankapp.domain.listener.PrintClientListener;
-import com.luxoft.bankapp.exceptions.ClientExistException;
-import com.luxoft.bankapp.exceptions.IllegalArgumentException;
+import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
-import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
-import com.luxoft.bankapp.service.BankService;
+import com.luxoft.bankapp.exceptions.OverDraftLimitExceededException;
+import com.luxoft.bankapp.model.Account;
+import com.luxoft.bankapp.model.Bank;
+import com.luxoft.bankapp.model.Client;
+import com.luxoft.bankapp.model.Gender;
+import com.luxoft.bankapp.service.BankServiceImpl;
 
-import java.util.Iterator;
-import java.util.List;
-
-/**
- * Created by omsk16 on 11/2/2016.
- */
 public class BankApplication {
-    public void modifyBank(){
+	static Client client;
+	static Client adam;
+	static Bank bank = new Bank();
 
+	public static void main(String[] args) {
 
-    }
+		initialize(bank);
+		modifyBank(client, 0, 500);
+		modifyBank(adam, 20, 0);
+		printBankReport(bank);
+		System.out.println(adam);
 
-    public static void printBalance(Bank bank){
+		// Initialization using BankService implementation
 
-        List<Client> clients = bank.getClients();
-        PrintClientInfo(clients);
-    }
+		BankServiceImpl bankService = new BankServiceImpl();
+		Bank ubs = new Bank();
 
-    private static void PrintClientInfo(List<Client> clients) {
-        List<Account> accounts;Iterator<Client> iterCl = clients.iterator();
+		Client client1 = new Client("Anna Smith", Gender.FEMALE);
+		client1.setInitialBalance(1000);
+		Account account1 = bankService.createAccount(client1, ubs.generateUniqId(), "Saving");
+		bankService.setActiveAccount(client1, account1);
+		bankService.deposit(client1, 400);
+		
+		/*
+		 * Information in catch clauses are just for test purposes
+		 */
+		try {
+			bankService.withdraw(client1, 50);
+		} catch (NotEnoughFundsException e) {
+			System.out.println("Not enough funds");
+		}
 
-        while(iterCl.hasNext()) {
-            Client currentClient = iterCl.next();
-            accounts = currentClient.getAccounts();
-            System.out.println("- - - - - - - - - - - -");
-            System.out.println(currentClient.getName());
-            Iterator<Account> iterAcc = accounts.iterator();
-                while (iterAcc.hasNext()){
-                    Account currentAcc = iterAcc.next();
-                    System.out.println("Account id: " + currentAcc.getId()+ "\nbalance: " + currentAcc.getBalance()+"\nMaximum Withdraw: "+currentAcc.maximumAmountToWithdraw());
+		bankService.addAccount(client1, account1);
+		
+		/*
+		 * Information in catch clauses are just for test purposes
+		 */
+		try {
+			bankService.addClient(ubs, client1);
+		} catch (ClientExistsException e) {
+			System.out.println("Client with that name already exists");
+		}
 
-                }
+		client1.setInitialOverdraft(1000);
+		Account account2 = bankService.createAccount(client1,ubs.generateUniqId(), "Checking");
+		bankService.setActiveAccount(client1, account2);
+		bankService.deposit(client1, 100);
+		try {
+			bankService.withdraw(client1, 10500);
+		} catch (OverDraftLimitExceededException e) {
+			System.out.println(e.getMessage());
+		} catch (NotEnoughFundsException e) {
+			System.out.println("Not enough funds");
+		}
+		bankService.addAccount(client1, account2);
+		//ubs.printReport();
+		System.out.println(client1);
+	}
 
-        }
-    }
+	/*
+	 * Method that creates a few clients and initializes them with sample values
+	 */
+	public static void initialize(Bank bank) {
+		client = new Client("Jonny Bravo", 1000, Gender.MALE);
+		Account clientSaving = client.createAccount(bank.generateUniqId(),"Saving");
+		client.setActiveAccount(clientSaving);
+		try {
+			client.withdraw(100);
+		} catch (NotEnoughFundsException e) {
+			System.out.println("Not enough funds");
+		}
+		client.addAccount(clientSaving);
 
-    public static void main(String[] args) throws ClientExistException {
-        Bank firstBank = new Bank();
-        PrintClientListener printClientListener = new PrintClientListener();
-        EmailNotificationListener emailNotificationListener = new EmailNotificationListener();
-        firstBank.registerListener(printClientListener);
-        firstBank.registerListener(emailNotificationListener);
+		adam = new Client("Adam Budzinski", 5000, Gender.MALE);
+		Account checking = adam.createAccount(bank.generateUniqId(),"Checking");
+		adam.setActiveAccount(checking);
+		adam.addAccount(checking);
+		adam.deposit(500);
 
-        try {
+		try {
+			bank.addClient(client);
+		} catch (ClientExistsException e) {
+			System.out.println("Client with that name already exists");
+		}
+		try {
+			bank.addClient(adam);
+		} catch (ClientExistsException e) {
+			System.out.println("Client with that name already exists");
+		}
 
-            Client ivan = new Client("Ivan", Gender.MALE);
-            Account ivanAcc = new SavingAccount(1, 10.0);
-            ivan.addAccount(ivanAcc);
-            firstBank.addClient(ivan);
+	}
 
-            Client jack = new Client("Jack", Gender.MALE);
-            Account jackAcc = new SavingAccount(2, 10.0);
-            jack.addAccount(jackAcc);
-            firstBank.addClient(jack);
+	public static void modifyBank(Client c, float withdraw, float deposit) {
+		c.deposit(deposit);
+		try {
+			c.withdraw(withdraw);
+		} catch (OverDraftLimitExceededException e) {
+			System.out.println(e.getMessage());
+		} catch (NotEnoughFundsException e) {
+			System.out.println("Not enough funds");
+		}
+	}
 
-            Client alice = new Client("Alice", Gender.FEMALE);
-            Account aliceAcc = new CheckingAccount(3, 100.0, 100.0);
-            alice.addAccount(aliceAcc);
-            firstBank.addClient(alice);
+	public static void printBankReport(Bank bank) {
+		bank.printReport();
 
-            Client bob = new Client("Bob", Gender.MALE);
-            Account bobAcc = new CheckingAccount(4, 1000.0, 100.0);
-            bob.addAccount(bobAcc);
-            bob.addAccount(new SavingAccount(5, 500.0));
-            firstBank.addClient(bob);
+	}
 
-            System.out.println("IvanAcc balance = " + ivanAcc.getBalance());
-            bobAcc.withdraw(10000.0);
-
-            jackAcc.deposit(777);
-
-            Client newClient = new Client("Donald", Gender.MALE);
-            newClient.addAccount(new CheckingAccount(7, 777.0, 1000.0));
-            BankService.addClient(firstBank, newClient);
-
-        }
-        catch (ClientExistException ce) {
-            System.out.println("Client with that name already exists!");
-        }
-        catch (IllegalArgumentException ia){
-            System.out.println("Illegal Argument Exception");
-        }
-        catch (OverdraftLimitExceededException ol){
-            System.out.println("Overdraft limit!");
-            System.out.println("Have only: "+ol.getOverDraft());
-        }
-        catch (NotEnoughFundsException ne) {
-            System.out.println("Not enough funds!");
-            System.out.println("Have only: "+ne.getBalance());
-        }
-
-
-        printBalance(firstBank);
-
-        System.out.println(emailNotificationListener.getEmailedClients());
-        System.out.println(printClientListener.getPrintedClients());
-
-
-
-    }
 }
