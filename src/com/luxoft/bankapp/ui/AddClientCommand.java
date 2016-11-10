@@ -8,6 +8,6 @@ public class AddClientCommand implements Command {
 
     }
     public void printCommandInfo(){
-        System.out.println("6. Add Client.");
+        System.out.println("Add Client.");
     }
 }

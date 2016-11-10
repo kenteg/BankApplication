@@ -1,7 +1,7 @@
 package com.luxoft.bankapp.ui;
 
-import com.luxoft.bankapp.model.Bank;
-import com.luxoft.bankapp.model.Client;
+import com.luxoft.bankapp.exceptions.CommandRunException;
+import com.luxoft.bankapp.model.*;
 
 import java.util.Scanner;
 
@@ -34,6 +34,7 @@ public class BankCommander {
 
         public static void main(String args[]) {
             Scanner s = new Scanner(System.in);
+            testInitBank();
 
             while (true) {
                 for (int i=0;i<commands.length;i++) {
@@ -43,8 +44,44 @@ public class BankCommander {
                 }
                 String commandString = s.nextLine();
                 int command=0;
+                command = Integer.valueOf(commandString);
                 // initialize command with commandString
-                commands[command].execute();
+                try {
+                    commands[command].execute();
+                }
+                catch (CommandRunException cre){
+                    System.out.println(cre.getErrorMessage());
+                }
+            }
+        }
+        public static void testInitBank(){
+            try {
+                Client a=new Client("Mike", 100, Gender.MALE);
+                Account acc1=new SavingAccount(currentBank.generateUniqId(),1000);
+                a.addAccount(acc1);
+                a.setActiveAccount(acc1);
+                currentBank.addClient(a);
+
+                Client b=new Client("Donald", 100, Gender.MALE);
+                Account acc3 = new SavingAccount(currentBank.generateUniqId(),2000);
+                Account acc4 = new CheckingAccount(currentBank.generateUniqId(),3000,500);
+                b.addAccount(acc3);
+                b.addAccount(acc4);
+                b.setActiveAccount(acc4);
+                currentBank.addClient(b);
+
+                Client c=new Client("Alice", 100, Gender.FEMALE);
+                Account acc5 = new CheckingAccount(currentBank.generateUniqId(),100,5000);
+                c.addAccount(acc5);
+                c.setActiveAccount(acc5);
+                currentBank.addClient(c);
+
+                Client d=new Client("Julia", 100, Gender.FEMALE);
+                currentBank.addClient(d);
+
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
             }
         }
     }
