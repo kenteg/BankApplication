@@ -25,6 +25,7 @@ public class CheckingAccount extends AbstractAccount {
 
 	@Override
 	public void withdraw(float x) throws OverDraftLimitExceededException {
+		if(x<0) throw new IllegalArgumentException();
 		if (balance + overdraft > x) {
 			balance -= x;
 		} else {

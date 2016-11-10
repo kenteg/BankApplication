@@ -63,7 +63,7 @@ public class Client implements Report {
 		activeAccount.deposit(x);
 	}
 
-	public void withdraw(float x) throws NotEnoughFundsException {
+	public void withdraw(float x) throws NotEnoughFundsException,IllegalArgumentException {
 		activeAccount.withdraw(x);
 	}
 
