@@ -6,6 +6,9 @@ import com.luxoft.bankapp.exceptions.OverDraftLimitExceededException;
 import com.luxoft.bankapp.model.Account;
 import com.luxoft.bankapp.model.Bank;
 import com.luxoft.bankapp.model.Client;
+import com.luxoft.bankapp.ui.BankCommander;
+
+import java.util.List;
 
 public class BankServiceImpl implements BankService {
 
@@ -28,6 +31,17 @@ public class BankServiceImpl implements BankService {
 	@Override
 	public void setActiveAccount(Client client, Account account) {
 		client.setActiveAccount(account);
+	}
+
+	@Override
+	public Client getClientByName(Bank bank,String name) {
+		List<Client> clients = BankCommander.currentBank.getClients();
+		for (Client curClient : clients) {
+			if (name.equals(curClient.getName())) {
+				return curClient;
+			}
+		}
+		return null;
 	}
 
 	public Account createAccount(Client client,int id, String accountType) {

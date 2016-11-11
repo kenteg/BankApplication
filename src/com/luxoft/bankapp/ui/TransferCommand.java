@@ -3,6 +3,8 @@ package com.luxoft.bankapp.ui;
 import com.luxoft.bankapp.exceptions.CommandRunException;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 import com.luxoft.bankapp.model.Client;
+import com.luxoft.bankapp.service.BankService;
+import com.luxoft.bankapp.service.BankServiceImpl;
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,25 +18,18 @@ public class TransferCommand implements Command{
     public void execute() throws CommandRunException {
         List<Client> clients = BankCommander.currentBank.getClients();
         String clientName;
-        Scanner scanClientName = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
         System.out.println("Enter recipient client name: ");
-        clientName = scanClientName.nextLine();
+        clientName = scan.nextLine();
+        BankService bankService = new BankServiceImpl();
 
-
-        Client recipient=null;
-        for (Client curClient : clients) {
-            if (clientName.equals(curClient.getName())) {
-                recipient = curClient;
-                System.out.println("Recipient client: " + curClient.getName());
-            }
-        }
+        Client recipient=bankService.getClientByName(BankCommander.currentBank,clientName);
         if(recipient==null) {
             throw new CommandRunException("TransferClientCommand: Receiver client not found!");
         }
 
         System.out.println("Enter transfer amount: ");
-        Scanner scanAmount = new Scanner(System.in);
-        float amount=Float.valueOf(scanClientName.nextLine());
+        float amount=Float.valueOf(scan.nextLine());
         transfer(amount,recipient);
 
     }
