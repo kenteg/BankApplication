@@ -13,6 +13,9 @@ public class Client implements Report {
 	private float initialOverdraft;
 	private float initialBalance;
 	private Gender gender;
+    private String email;
+    private String mobilePhone;
+
 
 	public String getGender() { return gender==Gender.MALE?"m":"f"; }
 	
@@ -22,7 +25,16 @@ public class Client implements Report {
 		this.gender = gender;
 	}
 
-	public Client(String name, Gender gender) {
+    public Client(String name, String email, String mobilePhone, float initialOverdraft, Gender gender) {
+        this.name = name;
+        this.email = email;
+        this.mobilePhone = mobilePhone;
+        this.initialOverdraft=initialOverdraft;
+        this.gender = gender;
+
+    }
+
+    public Client(String name, Gender gender) {
 		this(name, 0, gender);
 	}
 
