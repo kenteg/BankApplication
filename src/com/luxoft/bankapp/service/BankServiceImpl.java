@@ -7,7 +7,9 @@ import com.luxoft.bankapp.model.Account;
 import com.luxoft.bankapp.model.Bank;
 import com.luxoft.bankapp.model.Client;
 import com.luxoft.bankapp.ui.BankCommander;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
+import java.io.*;
 import java.util.List;
 
 public class BankServiceImpl implements BankService {
@@ -56,6 +58,20 @@ public class BankServiceImpl implements BankService {
 	public void withdraw(Client client, float x)
 			throws NotEnoughFundsException, OverDraftLimitExceededException {
 		client.withdraw(x);
+	}
+
+	public void saveClient(Client c) throws IOException{
+		FileOutputStream outFile = new FileOutputStream("Client.obj");
+		ObjectOutputStream objOutStrm = new ObjectOutputStream(outFile);
+		objOutStrm.writeObject(c);
+		objOutStrm.flush();
+		outFile.close();
+	}
+
+	public Client loadClient() throws IOException, ClassNotFoundException {
+		FileInputStream inFile = new FileInputStream("Client.obj");
+		ObjectInputStream objInStrm = new ObjectInputStream(inFile);
+		return (Client) objInStrm.readObject();
 	}
 
 }

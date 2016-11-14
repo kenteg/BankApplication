@@ -5,6 +5,8 @@ import com.luxoft.bankapp.model.Account;
 import com.luxoft.bankapp.model.Bank;
 import com.luxoft.bankapp.model.Client;
 
+import java.io.IOException;
+
 public interface BankService {
 	void addClient(Bank bank, Client client)
 			throws ClientExistsException;
@@ -16,5 +18,8 @@ public interface BankService {
 	void setActiveAccount(Client client, Account account);
 
 	Client getClientByName(Bank bank, String name);
+
+	void saveClient(Client c) throws IOException;
+	Client loadClient() throws IOException,ClassNotFoundException;
 
 }
