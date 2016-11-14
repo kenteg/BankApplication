@@ -109,15 +109,14 @@ public class Client implements Report {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-		Client client = (Client) o;
+        Client client = (Client) o;
 
-		if (!name.equals(client.name)) return false;
-		return gender == client.gender;
+        return name.equals(client.name) && gender == client.gender;
 
-	}
+    }
 
 	@Override
 	public int hashCode() {
