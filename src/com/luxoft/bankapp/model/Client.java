@@ -1,5 +1,6 @@
 package com.luxoft.bankapp.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.Set;
 
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 
-public class Client implements Report {
+public class Client implements Report,Serializable {
 	private String name;
 	private Set<Account> accounts = new HashSet<Account>();
 	
