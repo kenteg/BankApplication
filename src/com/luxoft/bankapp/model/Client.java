@@ -1,13 +1,15 @@
 package com.luxoft.bankapp.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 
 public class Client implements Report {
 	private String name;
-	private List<Account> accounts = new ArrayList<Account>();
+	private Set<Account> accounts = new HashSet<Account>();
 	
 	private Account activeAccount;
 	private float initialOverdraft;
@@ -64,7 +66,9 @@ public class Client implements Report {
 	}
 
 	public List<Account> getAccounts() {
-		return accounts;
+        List<Account> getAccounts = new ArrayList<>();
+        getAccounts.addAll(accounts);
+		return getAccounts;
 	}
 
 	public void addAccount(Account account) {

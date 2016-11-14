@@ -1,16 +1,21 @@
 package com.luxoft.bankapp.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 
 public class Bank implements Report {
 
-	private List<Client> clients = new ArrayList<Client>();
+	private Set<Client> clients = new HashSet<Client>();
 
 	public List<Client> getClients() {
-		return clients;
+		List<Client> listClients=new ArrayList<>();
+				listClients.addAll(clients);
+
+		return listClients;
 	}
 
 	public int uniqId=0;
