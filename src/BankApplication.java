@@ -5,12 +5,18 @@ import com.luxoft.bankapp.model.Account;
 import com.luxoft.bankapp.model.Bank;
 import com.luxoft.bankapp.model.Client;
 import com.luxoft.bankapp.model.Gender;
+import com.luxoft.bankapp.service.BankReport;
 import com.luxoft.bankapp.service.BankServiceImpl;
+import org.junit.Before;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertEquals;
 
 public class BankApplication {
     static Client client;
     static Client adam;
     static Bank bank = new Bank();
+
 
     public static void main(String[] args) {
 
@@ -70,6 +76,7 @@ public class BankApplication {
     /*
      * Method that creates a few clients and initializes them with sample values
      */
+
     public static void initialize(Bank bank) {
         client = new Client("Jonny Bravo", 1000, Gender.MALE);
         Account clientSaving = client.createAccount(bank.generateUniqId(), "Saving");
@@ -87,6 +94,24 @@ public class BankApplication {
         adam.addAccount(checking);
         adam.deposit(500);
 
+        Client boris = new Client("Boris Ivanov", 5000, Gender.MALE);
+        Account checking1 = boris.createAccount(bank.generateUniqId(), "Checking");
+        boris.setActiveAccount(checking1);
+        boris.addAccount(checking1);
+        boris.deposit(6000);
+
+        Client zafira = new Client("Zafira Budzinski", 5000, Gender.FEMALE);
+        Account checking2 = zafira.createAccount(bank.generateUniqId(), "Checking");
+        Account checking3 = zafira.createAccount(bank.generateUniqId(), "Checking");
+        Account saving2 = zafira.createAccount(bank.generateUniqId(), "Saving");
+        zafira.setActiveAccount(checking2);
+        zafira.addAccount(checking2);
+        zafira.addAccount(checking3);
+        zafira.addAccount(saving2);
+        zafira.deposit(700);
+
+
+
         try {
             bank.addClient(client);
         } catch (ClientExistsException e) {
@@ -94,6 +119,16 @@ public class BankApplication {
         }
         try {
             bank.addClient(adam);
+        } catch (ClientExistsException e) {
+            System.out.println("Client with that name already exists");
+        }
+        try {
+            bank.addClient(boris);
+        } catch (ClientExistsException e) {
+            System.out.println("Client with that name already exists");
+        }
+        try {
+            bank.addClient(zafira);
         } catch (ClientExistsException e) {
             System.out.println("Client with that name already exists");
         }
@@ -113,6 +148,15 @@ public class BankApplication {
 
     public static void printBankReport(Bank bank) {
         bank.printReport();
+
+    }
+
+    @Test
+    public void bankReportTest(){
+    initialize(bank);
+        assertEquals(4,BankReport.getNumberOfClients(bank));
+        assertEquals(6,BankReport.getAccountsNumber(bank));
+        System.out.println(BankReport.getClientsSorted(bank));
 
     }
 
