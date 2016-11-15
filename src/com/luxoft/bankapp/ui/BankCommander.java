@@ -16,24 +16,7 @@ public class BankCommander {
         public static Client currentClient;
         public static Map<String,Command> commands  = new HashMap<>();
 
-        static Command[] commands2 = {
-                new FindClientCommand(), // 1
-                new GetAccountsCommand(), // 2
-                new WithdrawCommand(), //3
-                new DepositCommand(),  //4
-                new TransferCommand(), //5
-                new AddClientCommand(), //6
-                // etc.
-                new Command() { // 7 - Exit Command
-                    public void execute() {
-                        System.exit(0);
-                    }
 
-                    public void printCommandInfo() {
-                        System.out.println("Exit");
-                    }
-                }
-        };
 
         public static void createStandartCommandList(){
             BankCommander.registerCommand("FindClient",new FindClientCommand());
