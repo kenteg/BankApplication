@@ -3,6 +3,8 @@ package com.luxoft.bankapp.ui;
 import com.luxoft.bankapp.exceptions.CommandRunException;
 import com.luxoft.bankapp.model.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -12,8 +14,9 @@ public class BankCommander {
 
         public static Bank currentBank = new Bank();
         public static Client currentClient;
+        public static Map<String,Command> commands  = new HashMap<>();
 
-        static Command[] commands = {
+        static Command[] commands2 = {
                 new FindClientCommand(), // 1
                 new GetAccountsCommand(), // 2
                 new WithdrawCommand(), //3
@@ -32,22 +35,41 @@ public class BankCommander {
                 }
         };
 
+        public static void createStandartCommandList(){
+            BankCommander.registerCommand("FindClient",new FindClientCommand());
+            BankCommander.registerCommand("GetAccounts",new GetAccountsCommand());
+            BankCommander.registerCommand("Withdraw",new WithdrawCommand());
+            BankCommander.registerCommand("Deposit",new DepositCommand());
+            BankCommander.registerCommand("Transfer",new TransferCommand());
+            BankCommander.registerCommand("AddClient",new AddClientCommand());
+            BankCommander.registerCommand("Exit",new Command() {
+                public void execute() {
+                    System.exit(0);
+                }
+                public void printCommandInfo() {
+                    System.out.println("Exit");
+                }
+            });
+
+        }
+
+        public static void registerCommand(String name, Command command){
+            commands.put(name,command);
+        }
+
+        public static void removeCommand(String name){
+            commands.remove(name);
+        }
+
         public static void main(String args[]) {
             Scanner s = new Scanner(System.in);
             testInitBank();
+            createStandartCommandList();
 
             while (true) {
-                for (int i=0;i<commands.length;i++) {
-// show menu
-                    System.out.print(i+") ");
-                    commands[i].printCommandInfo();
-                }
                 String commandString = s.nextLine();
-                int command=0;
-                command = Integer.valueOf(commandString);
-                // initialize command with commandString
                 try {
-                    commands[command].execute();
+                    commands.get(commandString).execute();
                 }
                 catch (CommandRunException cre){
                     System.out.println(cre.getErrorMessage());
