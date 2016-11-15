@@ -38,11 +38,12 @@ public class BankApplication {
         bankService.deposit(client1, 400);
 
 		/*
-		 * Information in catch clauses are just for test purposes
+         * Information in catch clauses are just for test purposes
 		 */
         try {
             bankService.withdraw(client1, 50);
-        } catch (NotEnoughFundsException e) {
+        }
+        catch (NotEnoughFundsException e) {
             System.out.println("Not enough funds");
         }
 
@@ -53,7 +54,8 @@ public class BankApplication {
 		 */
         try {
             bankService.addClient(ubs, client1);
-        } catch (ClientExistsException e) {
+        }
+        catch (ClientExistsException e) {
             System.out.println("Client with that name already exists!");
         }
 
@@ -63,9 +65,11 @@ public class BankApplication {
         bankService.deposit(client1, 100);
         try {
             bankService.withdraw(client1, 10500);
-        } catch (OverDraftLimitExceededException e) {
+        }
+        catch (OverDraftLimitExceededException e) {
             System.out.println(e.getMessage());
-        } catch (NotEnoughFundsException e) {
+        }
+        catch (NotEnoughFundsException e) {
             System.out.println("Not enough funds!");
         }
         bankService.addAccount(client1, account2);
@@ -83,7 +87,8 @@ public class BankApplication {
         client.setActiveAccount(clientSaving);
         try {
             client.withdraw(100);
-        } catch (NotEnoughFundsException e) {
+        }
+        catch (NotEnoughFundsException e) {
             System.out.println("Not enough funds");
         }
         client.addAccount(clientSaving);
@@ -111,25 +116,28 @@ public class BankApplication {
         zafira.deposit(700);
 
 
-
         try {
             bank.addClient(client);
-        } catch (ClientExistsException e) {
+        }
+        catch (ClientExistsException e) {
             System.out.println("Client with that name already exists");
         }
         try {
             bank.addClient(adam);
-        } catch (ClientExistsException e) {
+        }
+        catch (ClientExistsException e) {
             System.out.println("Client with that name already exists");
         }
         try {
             bank.addClient(boris);
-        } catch (ClientExistsException e) {
+        }
+        catch (ClientExistsException e) {
             System.out.println("Client with that name already exists");
         }
         try {
             bank.addClient(zafira);
-        } catch (ClientExistsException e) {
+        }
+        catch (ClientExistsException e) {
             System.out.println("Client with that name already exists");
         }
 
@@ -139,9 +147,11 @@ public class BankApplication {
         c.deposit(deposit);
         try {
             c.withdraw(withdraw);
-        } catch (OverDraftLimitExceededException e) {
+        }
+        catch (OverDraftLimitExceededException e) {
             System.out.println(e.getMessage());
-        } catch (NotEnoughFundsException e) {
+        }
+        catch (NotEnoughFundsException e) {
             System.out.println("Not enough funds");
         }
     }
@@ -152,10 +162,10 @@ public class BankApplication {
     }
 
     @Test
-    public void bankReportTest(){
-    initialize(bank);
-        assertEquals(4,BankReport.getNumberOfClients(bank));
-        assertEquals(6,BankReport.getAccountsNumber(bank));
+    public void bankReportTest() {
+        initialize(bank);
+        assertEquals(4, BankReport.getNumberOfClients(bank));
+        assertEquals(6, BankReport.getAccountsNumber(bank));
         System.out.println(BankReport.getClientsSorted(bank));
 
     }

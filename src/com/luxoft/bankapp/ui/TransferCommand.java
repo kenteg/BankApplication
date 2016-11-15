@@ -14,7 +14,7 @@ import static com.luxoft.bankapp.ui.BankCommander.currentClient;
 /**
  * Created by omsk16 on 11/9/2016.
  */
-public class TransferCommand implements Command{
+public class TransferCommand implements Command {
     public void execute() throws CommandRunException {
         List<Client> clients = BankCommander.currentBank.getClients();
         String clientName;
@@ -23,14 +23,14 @@ public class TransferCommand implements Command{
         clientName = scan.nextLine();
         BankService bankService = new BankServiceImpl();
 
-        Client recipient=bankService.getClientByName(BankCommander.currentBank,clientName);
-        if(recipient==null) {
+        Client recipient = bankService.getClientByName(BankCommander.currentBank, clientName);
+        if (recipient == null) {
             throw new CommandRunException("TransferClientCommand: Receiver client not found!");
         }
 
         System.out.println("Enter transfer amount: ");
-        float amount=Float.valueOf(scan.nextLine());
-        transfer(amount,recipient);
+        float amount = Float.valueOf(scan.nextLine());
+        transfer(amount, recipient);
 
     }
 
@@ -48,7 +48,7 @@ public class TransferCommand implements Command{
     }
 
 
-    public void printCommandInfo(){
+    public void printCommandInfo() {
         System.out.println("Transfer.");
     }
 }
