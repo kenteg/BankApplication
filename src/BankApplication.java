@@ -98,6 +98,12 @@ public class BankApplication {
         adam.setActiveAccount(checking);
         adam.addAccount(checking);
         adam.deposit(500);
+        try {
+            adam.withdraw(3500);
+        }
+        catch(NotEnoughFundsException ne){
+            ne.printStackTrace();
+        }
 
         Client boris = new Client("Boris Ivanov", 5000, Gender.MALE);
         Account checking1 = boris.createAccount(bank.generateUniqId(), "Checking");
@@ -113,7 +119,12 @@ public class BankApplication {
         zafira.addAccount(checking2);
         zafira.addAccount(checking3);
         zafira.addAccount(saving2);
-        zafira.deposit(700);
+        try {
+            zafira.withdraw(3500);
+        }
+        catch(NotEnoughFundsException ne){
+            ne.printStackTrace();
+        }
 
 
         try {
@@ -152,7 +163,7 @@ public class BankApplication {
             System.out.println(e.getMessage());
         }
         catch (NotEnoughFundsException e) {
-            System.out.println("Not enough funds");
+            System.out.println("Not enough funds!");
         }
     }
 
@@ -166,6 +177,7 @@ public class BankApplication {
         initialize(bank);
         assertEquals(4, BankReport.getNumberOfClients(bank));
         assertEquals(6, BankReport.getAccountsNumber(bank));
+        assertEquals(6500.0,BankReport.getBankCreditSum(bank),0.001);
         System.out.println(BankReport.getClientsSorted(bank));
 
     }
