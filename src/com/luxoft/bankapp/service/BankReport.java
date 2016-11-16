@@ -39,8 +39,8 @@ public class BankReport {
         TreeSet<Client> sortedClients = new TreeSet<>(new Comparator<Client>() {
             @Override
             public int compare(Client o1, Client o2) {
-                if (o1.getBalance()<o2.getBalance()) return 1;
-                if (o1.getBalance()>o2.getBalance()) return -1;
+                if (o1.getBalance() < o2.getBalance()) return 1;
+                if (o1.getBalance() > o2.getBalance()) return -1;
                 return 0;
             }
         });
@@ -50,7 +50,13 @@ public class BankReport {
 
     //Display the total amount of credits granted to the bank clients. That is, the sum of all values above account balance for CheckingAccount
     public static float getBankCreditSum(Bank bank) {
-        return 0;
+        int totalCredit = 0;
+        for (Client c : bank.getClients()) {
+            for (Account acc : c.getAccounts()) {
+                if (acc.getBalance() < 0) totalCredit += Math.abs(acc.getBalance());
+            }
+        }
+        return totalCredit;
     }
 
     //Add field city to class Client. This method needs a table Map<String, List<Client>>, with cities as the keys and values – the list of clients in each city. Print the resulting table, and order by city name alphabetically.
