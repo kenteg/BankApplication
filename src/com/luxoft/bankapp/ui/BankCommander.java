@@ -42,6 +42,7 @@ public class BankCommander {
         sb.append("Transfer\n");
         sb.append("AddClient\n");
         sb.append("Exit\n");
+        sb.append("END");
 
     return sb.toString();
     }
