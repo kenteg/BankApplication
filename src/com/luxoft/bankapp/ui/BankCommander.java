@@ -18,6 +18,7 @@ public class BankCommander {
 
 
     public static void createStandartCommandList() {
+        System.out.println("List of available commands: ");
         BankCommander.registerCommand("FindClient", new FindClientCommand());
         BankCommander.registerCommand("GetAccounts", new GetAccountsCommand());
         BankCommander.registerCommand("Withdraw", new WithdrawCommand());
@@ -34,10 +35,12 @@ public class BankCommander {
             }
         });
 
+
     }
 
     public static void registerCommand(String name, Command command) {
         commands.put(name, command);
+        System.out.println(name);
     }
 
     public static void removeCommand(String name) {
