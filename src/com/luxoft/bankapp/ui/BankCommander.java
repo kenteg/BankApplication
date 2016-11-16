@@ -17,7 +17,7 @@ public class BankCommander {
     public static Map<String, Command> commands = new HashMap<>();
 
 
-    public static void createStandartCommandList() {
+    public static String createStandartCommandList() {
         System.out.println("List of available commands: ");
         BankCommander.registerCommand("FindClient", new FindClientCommand());
         BankCommander.registerCommand("GetAccounts", new GetAccountsCommand());
@@ -34,8 +34,16 @@ public class BankCommander {
                 System.out.println("Exit");
             }
         });
+    StringBuffer sb = new StringBuffer();
+        sb.append("List of available commands: \n");
+        sb.append("FindClient\n");
+        sb.append("Withdraw\n");
+        sb.append("Deposit\n");
+        sb.append("Transfer\n");
+        sb.append("AddClient\n");
+        sb.append("Exit\n");
 
-
+    return sb.toString();
     }
 
     public static void registerCommand(String name, Command command) {
@@ -45,6 +53,14 @@ public class BankCommander {
 
     public static void removeCommand(String name) {
         commands.remove(name);
+    }
+
+    public static void runCommandByName(String name){
+        try {
+            commands.get(name).execute();
+        } catch (CommandRunException e) {
+            System.out.println(e.getErrorMessage());
+        }
     }
 
     public static void main(String args[]) {
