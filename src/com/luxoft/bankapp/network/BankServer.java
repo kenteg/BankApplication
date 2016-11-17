@@ -28,20 +28,12 @@ public class BankServer {
         bankCommander.testInitBank();
         bankCommander.createStandartCommandList();
         bankService = new BankServiceImpl();
-        try (ServerSocket socket = new ServerSocket(5432); Socket bankSrv = socket.accept(); BufferedWriter out = new BufferedWriter(
-                new OutputStreamWriter(bankSrv.getOutputStream())); BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        bankSrv.getInputStream()));) {
-/*
-            socket = new ServerSocket(5432);
-            System.out.println("Waiting for connect...");
-            bankSrv = socket.accept();
-            out = new BufferedWriter(
-                    new OutputStreamWriter(bankSrv.getOutputStream()));
-            in = new BufferedReader(
-                    new InputStreamReader(
-                            bankSrv.getInputStream()));
-                            */
+        //try with resourses
+        try (ServerSocket socket = new ServerSocket(5432);
+             Socket bankSrv = socket.accept();
+             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(bankSrv.getOutputStream()));
+             BufferedReader in = new BufferedReader(new InputStreamReader(bankSrv.getInputStream()));) {
+
             System.out.println("Client connected! ");
             System.out.println("Wait client name...");
             clientName = in.readLine();
@@ -50,7 +42,8 @@ public class BankServer {
             System.out.println(client.getName());
             if (client != null) {
                 sendOk(out);
-            } else {
+            }
+            else {
                 out.write("error: Name not found\n");
                 out.flush();
             }
@@ -68,13 +61,15 @@ public class BankServer {
                     case "Withdraw":
                         try {
                             remote_withdraw(out, in);
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
                             sendError(out);
                         }
                     case "Deposit":
                         try {
                             remoteDeposit(out, in);
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
                             sendError(out);
                         }
                         break;
@@ -85,14 +80,16 @@ public class BankServer {
                             out.close();
                             in.close();
                             return;
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
                             sendError(out);
                         }
                         break;
                 }
 
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
