@@ -19,9 +19,10 @@ public class BankClient {
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("Enter client name: ");
-            String inp= s.nextLine();
+            String inp = s.next();
             while (true) {
-                out.write(inp);
+                out.write(inp+"\n");
+                out.flush();
                 String res = in.readLine();
                 if ("ok".equals(res)) {
                     break;
@@ -30,13 +31,26 @@ public class BankClient {
                     System.out.println(res);
                 }
             }
-            String cmd = s.nextLine();
+            String cmd;
             while (true) {
-                System.out.println("Write command: ");
-                out.write(cmd);
+                System.out.println("Write command  Balance, Deposit, Withdraw or Exit: ");
+                cmd = s.next();
+                out.write(cmd+"\n");
+                out.flush();
+                if((cmd.equals("Deposit"))||(cmd.equals("Withdraw"))){
+                    System.out.println("Enter amount: ");
+                    cmd = s.next();
+                    out.write(cmd+"\n");
+                    out.flush();
+                }
+                if("Exit".equals(cmd)){
+                    System.out.println("Exit!");
+                    out.close();
+                    in.close();
+                    return;
+                }
                 String res = in.readLine();
                 if ("ok".equals(res)) {
-                    break;
                 }
 
                 else {
