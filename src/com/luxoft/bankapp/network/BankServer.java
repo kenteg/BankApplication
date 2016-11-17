@@ -15,10 +15,10 @@ import java.net.Socket;
  * Created by omsk16 on 11/16/2016.
  */
 public class BankServer {
-    ServerSocket socket = null;
-    BufferedWriter out = null;
-    BufferedReader in = null;
-    Socket bankSrv;
+    // ServerSocket socket = null;
+    // BufferedWriter out = null;
+    // BufferedReader in = null;
+    //  Socket bankSrv;
     BankCommander bankCommander;
     BankService bankService;
     String clientName;
@@ -28,8 +28,11 @@ public class BankServer {
         bankCommander.testInitBank();
         bankCommander.createStandartCommandList();
         bankService = new BankServiceImpl();
-        try {
-
+        try (ServerSocket socket = new ServerSocket(5432); Socket bankSrv = socket.accept(); BufferedWriter out = new BufferedWriter(
+                new OutputStreamWriter(bankSrv.getOutputStream())); BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                        bankSrv.getInputStream()));) {
+/*
             socket = new ServerSocket(5432);
             System.out.println("Waiting for connect...");
             bankSrv = socket.accept();
@@ -38,14 +41,10 @@ public class BankServer {
             in = new BufferedReader(
                     new InputStreamReader(
                             bankSrv.getInputStream()));
+                            */
             System.out.println("Client connected! ");
             System.out.println("Wait client name...");
             clientName = in.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
 
             client = bankService.getClientByName(BankCommander.currentBank, clientName);
             bankCommander.currentClient = client;
@@ -57,19 +56,10 @@ public class BankServer {
                 out.write("error: Name not found\n");
                 out.flush();
             }
-        } catch (IOException e) {
-            try {
-                out.write("error!\n");
-                out.flush();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
 
 
-        String cmd;
-        while (true) {
-            try {
+            String cmd;
+            while (true) {
                 System.out.println("Wait for command....");
                 cmd = in.readLine();
                 System.out.println("Command: " + cmd);
@@ -117,15 +107,9 @@ public class BankServer {
                         break;
                 }
 
-            } catch (IOException e2) {
-                try {
-                    out.write("error!\n");
-                    out.flush();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                e2.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
