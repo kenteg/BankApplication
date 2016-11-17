@@ -45,18 +45,15 @@ public class BankServer {
             System.out.println("Client connected! ");
             System.out.println("Wait client name...");
             clientName = in.readLine();
-
             client = bankService.getClientByName(BankCommander.currentBank, clientName);
             bankCommander.currentClient = client;
             System.out.println(client.getName());
             if (client != null) {
-                out.write("ok\n");
-                out.flush();
+                sendOk(out);
             } else {
                 out.write("error: Name not found\n");
                 out.flush();
             }
-
 
             String cmd;
             while (true) {
@@ -70,27 +67,15 @@ public class BankServer {
                         break;
                     case "Withdraw":
                         try {
-                            Float f = Float.parseFloat(
-                                    in.readLine());
-                            client.withdraw(f);
-                            out.write("ok\n");
-                            out.flush();
-                            System.out.println("Successfully withdrawn!" + f);
+                            remote_withdraw(out, in);
                         } catch (Exception e) {
-                            out.write("error\n");
-                            out.flush();
+                            sendError(out);
                         }
                     case "Deposit":
                         try {
-                            Float f = Float.parseFloat(
-                                    in.readLine());
-                            client.deposit(f);
-                            out.write("ok\n");
-                            out.flush();
-                            System.out.println("Successfully deposited!" + f);
+                            remoteDeposit(out, in);
                         } catch (Exception e) {
-                            out.write("error\n");
-                            out.flush();
+                            sendError(out);
                         }
                         break;
 
@@ -101,8 +86,7 @@ public class BankServer {
                             in.close();
                             return;
                         } catch (Exception e) {
-                            out.write("error\n");
-                            out.flush();
+                            sendError(out);
                         }
                         break;
                 }
@@ -111,6 +95,32 @@ public class BankServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendOk(BufferedWriter out) throws IOException {
+        out.write("ok\n");
+        out.flush();
+    }
+
+    private void remoteDeposit(BufferedWriter out, BufferedReader in) throws IOException {
+        Float f = Float.parseFloat(
+                in.readLine());
+        client.deposit(f);
+        sendOk(out);
+        System.out.println("Successfully deposited!" + f);
+    }
+
+    private void sendError(BufferedWriter out) throws IOException {
+        out.write("error\n");
+        out.flush();
+    }
+
+    private void remote_withdraw(BufferedWriter out, BufferedReader in) throws IOException, NotEnoughFundsException {
+        Float f = Float.parseFloat(
+                in.readLine());
+        client.withdraw(f);
+        sendOk(out);
+        System.out.println("Successfully withdrawn!" + f);
     }
 
     public static void main(String[] args) {
