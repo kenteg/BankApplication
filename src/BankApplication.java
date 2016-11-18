@@ -1,6 +1,7 @@
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 import com.luxoft.bankapp.exceptions.OverDraftLimitExceededException;
+import com.luxoft.bankapp.gui.BankApplicationForm;
 import com.luxoft.bankapp.model.Account;
 import com.luxoft.bankapp.model.Bank;
 import com.luxoft.bankapp.model.Client;
@@ -9,6 +10,8 @@ import com.luxoft.bankapp.service.BankReport;
 import com.luxoft.bankapp.service.BankServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.swing.*;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -75,6 +78,13 @@ public class BankApplication {
         bankService.addAccount(client1, account2);
         //ubs.printReport();
         System.out.println(client1);
+
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame.setDefaultLookAndFeelDecorated(true);
+                new BankApplicationForm();
+            }
+        });
     }
 
     /*
