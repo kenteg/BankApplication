@@ -11,10 +11,8 @@ import java.awt.event.ActionListener;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import com.luxoft.bankapp.*;
-import com.luxoft.bankapp.ui.BankCommander;
 
-import static com.sun.glass.ui.Cursor.setVisible;
+import com.luxoft.bankapp.ui.BankCommander;
 
 /**
  * @author Khrishpens Viktor
@@ -24,6 +22,7 @@ public class BankApplicationForm extends JFrame {
     private JTable table1;
     private JPanel panel1;
     private JButton button1;
+    private JTextArea textArea1;
 
 
     public BankApplicationForm() {
@@ -43,8 +42,10 @@ public class BankApplicationForm extends JFrame {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane jMsg = new JOptionPane();
-                jMsg.showMessageDialog(panel1, "Hello");
+                int id = table1.getSelectedRow();
+                BankCommander.currentClient = BankCommander.currentBank.getClients().get(id);
+                BankCommander.currentClient.deposit(Float.parseFloat(textArea1.getText()));
+                table1.updateUI();
             }
         });
     }
@@ -66,12 +67,19 @@ public class BankApplicationForm extends JFrame {
     private void $$$setupUI$$$() {
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout(0, 0));
-        button1 = new JButton();
-        button1.setText("Button");
-        panel1.add(button1, BorderLayout.SOUTH);
         table1 = new JTable();
         table1.setToolTipText("table1");
         panel1.add(table1, BorderLayout.CENTER);
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.add(panel2, BorderLayout.SOUTH);
+        button1 = new JButton();
+        button1.setText("Deposit");
+        panel2.add(button1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        textArea1 = new JTextArea();
+        textArea1.setText("Enter amount here");
+        textArea1.setWrapStyleWord(false);
+        panel2.add(textArea1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
     }
 
     /**
@@ -80,68 +88,69 @@ public class BankApplicationForm extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
-}
 
-class MyTableModel implements TableModel {
+    private class MyTableModel implements TableModel {
 
-    private Set<TableModelListener> listeners = new HashSet<TableModelListener>();
+        private Set<TableModelListener> listeners = new HashSet<TableModelListener>();
 
-    private List<Client> clients;
+        private List<Client> clients;
 
-    public MyTableModel(List<Client> clients) {
-        this.clients = clients;
-    }
-
-   public void addTableModelListener(TableModelListener listener) {
-        listeners.add(listener);
-    }
-
-    public Class<?> getColumnClass(int columnIndex) {
-        return String.class;
-    }
-
-    public int getColumnCount() {
-        return 3;
-    }
-
-    public String getColumnName(int columnIndex) {
-        switch (columnIndex) {
-            case 0:
-                return "Name";
-            case 1:
-                return "gender";
-            case 2:
-                return "Balance";
+        public MyTableModel(List<Client> clients) {
+            this.clients = clients;
         }
-        return "";
-    }
 
-    public int getRowCount() {
-        return clients.size();
-    }
-
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        Client client = clients.get(rowIndex);
-        switch (columnIndex) {
-            case 0:
-                return client.getName();
-            case 1:
-                return client.getGender();
-            case 2:
-                return String.valueOf(client.getBalance());
+        public void addTableModelListener(TableModelListener listener) {
+            listeners.add(listener);
         }
-        return "";
-    }
 
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
-    }
+        public Class<?> getColumnClass(int columnIndex) {
+            return String.class;
+        }
 
-    public void removeTableModelListener(TableModelListener listener) {
-        listeners.remove(listener);
-    }
+        public int getColumnCount() {
+            return 3;
+        }
 
-    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+        public String getColumnName(int columnIndex) {
+            switch (columnIndex) {
+                case 0:
+                    return "Name";
+                case 1:
+                    return "gender";
+                case 2:
+                    return "Balance";
+            }
+            return "";
+        }
+
+        public int getRowCount() {
+            return clients.size();
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Client client = clients.get(rowIndex);
+            switch (columnIndex) {
+                case 0:
+                    return client.getName();
+                case 1:
+                    return client.getGender();
+                case 2:
+                    return String.valueOf(client.getBalance());
+            }
+            return "";
+        }
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+
+        public void removeTableModelListener(TableModelListener listener) {
+            listeners.remove(listener);
+        }
+
+        public void setValueAt(Object value, int rowIndex, int columnIndex) {
+
+        }
 
     }
 
