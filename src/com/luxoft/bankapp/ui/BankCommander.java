@@ -103,6 +103,9 @@ public class BankCommander {
             currentBank.addClient(c);
 
             Client d = new Client("Julia", 100, Gender.FEMALE);
+            Account acc6 = new CheckingAccount(currentBank.generateUniqId(), 100, 5000);
+            d.addAccount(acc6);
+            d.setActiveAccount(acc6);
             currentBank.addClient(d);
 
         }

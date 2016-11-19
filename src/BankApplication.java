@@ -81,7 +81,6 @@ public class BankApplication {
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                JFrame.setDefaultLookAndFeelDecorated(true);
                 new BankApplicationForm();
             }
         });

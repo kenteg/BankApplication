@@ -7,14 +7,16 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="59aad" class="javax.swing.JTable" binding="table1" default-binding="true">
-        <constraints border-constraint="Center"/>
-        <properties/>
-      </component>
       <component id="b0f2c" class="javax.swing.JButton" binding="button1" default-binding="true">
         <constraints border-constraint="South"/>
         <properties>
           <text value="Button"/>
+        </properties>
+      </component>
+      <component id="e5893" class="javax.swing.JTable" binding="table1" default-binding="true">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <toolTipText value="table1"/>
         </properties>
       </component>
     </children>
