@@ -24,16 +24,16 @@ public class BankServer {
     String clientName;
     Client client;
 
-    public BankServer() {
+    public BankServer(Socket bankSrv) {
         bankCommander.testInitBank();
         bankCommander.createStandartCommandList();
         bankService = new BankServiceImpl();
         //try with resourses
-        try (ServerSocket socket = new ServerSocket(5432);
-             Socket bankSrv = socket.accept();
+        try (
+
              BufferedWriter out = new BufferedWriter(new OutputStreamWriter(bankSrv.getOutputStream()));
              BufferedReader in = new BufferedReader(new InputStreamReader(bankSrv.getInputStream()));) {
-
+            System.out.println("i am " +Thread.currentThread().getName());
             System.out.println("Client connected! ");
             System.out.println("Wait client name...");
             clientName = in.readLine();
@@ -121,7 +121,7 @@ public class BankServer {
     }
 
     public static void main(String[] args) {
-        BankServer bankServer = new BankServer();
+//        BankServer bankServer = new BankServer();
 
     }
 }
