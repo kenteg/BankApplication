@@ -77,45 +77,60 @@ public class BankClient {
 
     public void test() {
         try {
-            while (true) {
-                out.write("Donald" + "\n");
-                out.flush();
-                String res = in.readLine();
-                if ("ok".equals(res)) {
-                    break;
-                }
-                else {
-                    System.out.println(res);
-                }
-            }
+            out.write("Donald" + "\n");
+            out.flush();
+            String res = in.readLine();
+
+
             String cmd;
-            while (true) {
-                cmd = "Deposit";
+
+            cmd = "Balance";
+            out.write(cmd + "\n");
+            out.flush();
+            res = in.readLine();
+            if ("ok".equals(res)) {
+            }
+
+            else {
+                System.out.println(res);
+            }
+
+
+            cmd = "Withdraw";
+            out.write(cmd + "\n");
+            out.flush();
+            if ((cmd.equals("Deposit")) || (cmd.equals("Withdraw"))) {
+                cmd = "1.0";
                 out.write(cmd + "\n");
                 out.flush();
-                if ((cmd.equals("Deposit")) || (cmd.equals("Withdraw"))) {
-                    cmd = "1.0";
-                    out.write(cmd + "\n");
-                    out.flush();
-                }
-                if ("Exit".equals(cmd)) {
-                    System.out.println("Exit!");
-                    out.close();
-                    in.close();
-                    return;
-                }
-                String res = in.readLine();
-                if ("ok".equals(res)) {
-                }
-
-                else {
-                    System.out.println(res);
-                }
             }
+            if ("Exit".equals(cmd)) {
+                System.out.println("Exit!");
+                out.close();
+                in.close();
+                return;
+            }
+            res = in.readLine();
+            if ("ok".equals(res)) {
+            }
+
+            else {
+                System.out.println(res);
+            }
+
+
+            cmd = "Exit";
+            out.write(cmd + "\n");
+            out.flush();
+            System.out.println("Exit!");
+            out.close();
+            in.close();
+
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+
 
     }
 
@@ -127,9 +142,10 @@ public class BankClient {
 
     public static void main(String[] args) {
 
-        BankClient mockClients[]= new BankClient[2];
+        BankClient mockClients[] = new BankClient[100];
         for (int i = 0; i < 100; i++) {
             try {
+                mockClients[i] = new BankClient();
                 mockClients[i].connect();
                 mockClients[i].test();
             }

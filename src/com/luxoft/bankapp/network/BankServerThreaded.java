@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
  *         created Ноябрь 19 2016
  */
 public class BankServerThreaded {
-    public static final int POOL_SIZE = 10;
+    public static final int POOL_SIZE = 100;
     public static final int PORT = 5432;
     ServerSocket socket;
     boolean running = false;
@@ -36,7 +36,6 @@ public class BankServerThreaded {
 
     public static void main(String[] args) {
     BankServerThreaded bank = new BankServerThreaded();
-
     }
 }
 
