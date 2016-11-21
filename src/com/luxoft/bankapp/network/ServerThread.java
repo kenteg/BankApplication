@@ -7,7 +7,7 @@ import java.net.Socket;
  *         created Ноябрь 19 2016
  */
 public class ServerThread implements Runnable {
-    Socket bankSrv;;
+    Socket bankSrv;
 
     public ServerThread(Socket socket) {
         this.bankSrv=socket;

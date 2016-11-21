@@ -142,8 +142,8 @@ public class BankClient {
 
     public static void main(String[] args) {
 
-        BankClient mockClients[] = new BankClient[100];
-        for (int i = 0; i < 100; i++) {
+        BankClient mockClients[] = new BankClient[2999];
+        for (int i = 0; i < 2999; i++) {
             try {
                 mockClients[i] = new BankClient();
                 mockClients[i].connect();

@@ -90,7 +90,7 @@ public class BankCommander {
 
             Client b = new Client("Donald", 100, Gender.MALE);
             Account acc3 = new SavingAccount(currentBank.generateUniqId(), 2000);
-            Account acc4 = new CheckingAccount(currentBank.generateUniqId(), 3000, 500);
+            Account acc4 = new CheckingAccount(currentBank.generateUniqId(), 100000, 500);
             b.addAccount(acc3);
             b.addAccount(acc4);
             b.setActiveAccount(acc4);
